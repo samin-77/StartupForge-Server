@@ -69,6 +69,8 @@ const seedDummyData = async () => {
       }
     }
 
+    await Payment.deleteMany({ amount: { $gte: 1000000000 } });
+
     const dummyPayments = [
       { user_name: 'Sarah Chen', user_email: 'sarah@nexusai.io', amount: 19.99, transaction_id: 'pi_3R_DUMMY_NEXUS_001', payment_status: 'succeeded', paid_at: new Date('2026-06-15') },
       { user_name: 'Marcus Johnson', user_email: 'marcus@finflow.co', amount: 19.99, transaction_id: 'pi_3R_DUMMY_FINFL_002', payment_status: 'succeeded', paid_at: new Date('2026-06-18') },
