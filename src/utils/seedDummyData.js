@@ -69,13 +69,6 @@ const seedDummyData = async () => {
       }
     }
 
-    const paymentsWithBadAmounts = await Payment.find({ amount: { $gt: 1000 } });
-    for (const p of paymentsWithBadAmounts) {
-      p.amount = Number((p.amount / 100).toFixed(2));
-      await p.save();
-      console.log(`Fixed payment amount for ${p.user_email}: ${p.amount}`);
-    }
-
     const dummyPayments = [
       { user_name: 'Sarah Chen', user_email: 'sarah@nexusai.io', amount: 19.99, transaction_id: 'pi_3R_DUMMY_NEXUS_001', payment_status: 'succeeded', paid_at: new Date('2026-06-15') },
       { user_name: 'Marcus Johnson', user_email: 'marcus@finflow.co', amount: 19.99, transaction_id: 'pi_3R_DUMMY_FINFL_002', payment_status: 'succeeded', paid_at: new Date('2026-06-18') },
