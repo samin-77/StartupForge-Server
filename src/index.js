@@ -11,6 +11,7 @@ const applicationRoutes = require('./routes/applicationRoutes');
 const userRoutes = require('./routes/userRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const seedAdmin = require('./utils/seedAdmin');
 
 const app = express();
 
@@ -30,6 +31,9 @@ app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
 const PORT = process.env.PORT || 5000;
 
-connectDB().then(() => {
+connectDB().then(async () => {
+  if (process.env.NODE_ENV !== 'development') {
+    await seedAdmin();
+  }
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 });
