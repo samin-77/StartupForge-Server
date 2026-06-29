@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const Startup = require('../models/Startup');
 const Opportunity = require('../models/Opportunity');
+const Payment = require('../models/Payment');
 
 const dummyFounders = [
   { name: 'Sarah Chen', email: 'sarah@nexusai.io', password: 'Founder@123', role: 'founder', skills: ['AI', 'Python', 'Leadership'], bio: 'AI researcher turned entrepreneur. Building the future of intelligent systems.' },
@@ -32,12 +33,6 @@ const dummyOpportunities = [
 
 const seedDummyData = async () => {
   try {
-    const existing = await Startup.countDocuments();
-    if (existing > 0) {
-      console.log('Dummy data already exists, skipping seed');
-      return;
-    }
-
     const hashedPassword = await bcrypt.hash('Founder@123', 12);
 
     for (let i = 0; i < dummyFounders.length; i++) {
@@ -74,7 +69,23 @@ const seedDummyData = async () => {
       }
     }
 
-    console.log('Dummy data seeded: 6 founders, 6 startups, 6 opportunities');
+    const dummyPayments = [
+      { user_name: 'Sarah Chen', user_email: 'sarah@nexusai.io', amount: 19.99, transaction_id: 'pi_3R_DUMMY_NEXUS_001', payment_status: 'succeeded', paid_at: new Date('2026-06-15') },
+      { user_name: 'Marcus Johnson', user_email: 'marcus@finflow.co', amount: 19.99, transaction_id: 'pi_3R_DUMMY_FINFL_002', payment_status: 'succeeded', paid_at: new Date('2026-06-18') },
+      { user_name: 'Priya Patel', user_email: 'priya@healthsync.com', amount: 19.99, transaction_id: 'pi_3R_DUMMY_HEALT_003', payment_status: 'succeeded', paid_at: new Date('2026-06-20') },
+      { user_name: 'Alex Kim', user_email: 'alex@shopwave.com', amount: 19.99, transaction_id: 'pi_3R_DUMMY_SHOPW_004', payment_status: 'succeeded', paid_at: new Date('2026-06-22') },
+      { user_name: 'Jordan Blake', user_email: 'jordan@learnspark.io', amount: 19.99, transaction_id: 'pi_3R_DUMMY_LEARN_005', payment_status: 'failed', paid_at: new Date('2026-06-25') },
+      { user_name: 'Maya Torres', user_email: 'maya@ecopulse.earth', amount: 19.99, transaction_id: 'pi_3R_DUMMY_ECOP_006', payment_status: 'succeeded', paid_at: new Date('2026-06-28') },
+    ];
+
+    for (const payment of dummyPayments) {
+      const existing = await Payment.findOne({ transaction_id: payment.transaction_id });
+      if (!existing) {
+        await Payment.create(payment);
+      }
+    }
+
+    console.log('Dummy data seeded: 6 founders, 6 startups, 6 opportunities, 6 transactions');
   } catch (err) {
     console.error('Error seeding dummy data:', err.message);
   }
